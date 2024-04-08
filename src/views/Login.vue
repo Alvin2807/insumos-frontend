@@ -27,6 +27,8 @@
                             </v-text-field>
 
                             <v-text-field
+                                outlined
+
                             
                             >
 
