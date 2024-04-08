@@ -28,6 +28,7 @@
 
                             <v-text-field
                                 outlined
+                                type="password"
 
                             
                             >
