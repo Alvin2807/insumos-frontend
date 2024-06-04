@@ -32,14 +32,18 @@
                         >
                             <v-btn
                                 dark
-                                color="green"
+                                color="#074976"
                                 @click="registrar()"
                             >
                             registrar
                             </v-btn>
                             <v-btn
-                                dark
-                                color="info"
+                                outlined
+                                
+                                color="#4A8BA2"
+                              
+                                :disabled="btnGuardar"
+                                @click="guardar()"
                             >
                                 guardar cambios
                             </v-btn>
@@ -117,10 +121,12 @@ export default {
             titulo:-1,
             desserts:[],
             overlay:false,
+            btnGuardar:true,
             datos:true,
             opacity:0,
             search:'',
             botones:null,
+            editedIndex:-1,
             headers:
             [
                 {text:'Categoría', value:'categoria', class:'blue-grey lighten-4'},
@@ -129,7 +135,7 @@ export default {
             editedItem:{
                 categoria:'',
                 usuario:''
-            }
+            },
         }
     },
 
@@ -164,6 +170,7 @@ export default {
         },
 
         async registrar(){
+            this.btnGuardar = true
             if (this.$refs.validacion.validate()) {
                 this.overlay = true
                 setTimeout(()=>{
@@ -230,7 +237,97 @@ export default {
                 showConfirmButton:false,
                 timer:1500
             })
-        }
+        },
+
+        editar(item){
+            this.overlay = true
+            setTimeout(()=>{
+                this.overlay = false
+                Swal.fire({
+                    title:'¿Estas seguro de editar está categoría?',
+                    icon:'question',
+                    showCancelButton:true,
+                    confirmButtonColor:"#239B56",
+                    confirmButtonText:'Sí',
+                    cancelButtonText:'No',
+                    cancelButtonColor:'#C0081F'
+            }).then((result)=>{
+                if (result.isConfirmed) {
+                    this.editedIndex = this.desserts.indexOf(item)
+                    this.editedItem  = Object.assign({},item)
+                    this.btnGuardar =false
+                }
+            })
+               
+            },1500)
+        },
+
+       async guardar(){
+            if (this.$refs.validacion.validate()) {
+                this.overlay = true
+                setTimeout(()=>{
+                    this.overlay = false
+                    const guardarDatos = async()=>{
+                        try {
+                            this.editedItem.usuario = this.loginDatos.usuario
+                            const respuesta = await API.put('editar_categoria', this.editedItem)
+                            if (respuesta.data.ok == true) {
+                                if (respuesta.data.existeCategoria) {
+                                    this.mensajeExisteEditarCategoria(respuesta.data.existeCategoria)
+                                } else {
+                                    this.mensajeGuardarExitoso(respuesta.data.modificado)
+                                    this.mostrarCategoria()
+                                    this.limpiar()
+                                    this.btnGuardar = true
+                                }
+                            } else if (respuesta.data.ok == false) {
+                              this.mensajeErrorEditarCategori(respuesta.data.errorModifica)  
+                            }
+                        } catch (error) {
+                            if (error) {
+                                Swal.fire({
+                                    icon:'error',
+                                    showConfirmButton:false,
+                                    title:'Hubo un error consulte con el Administrador del sistema',
+                                    timer:1500
+                                })
+                            }
+                        }
+                    }
+                    return guardarDatos()
+                    
+                },1500)
+            }
+           
+        },
+
+        mensajeExisteEditarCategoria(existeCategoria){
+            Swal.fire({
+                icon:'info',
+                text:existeCategoria,
+                showConfirmButton:false,
+                timer:1500
+            })
+        },
+
+        mensajeGuardarExitoso(modificado){
+            Swal.fire({
+                icon:'success',
+                text:modificado,
+                showConfirmButton:false,
+                timer:1500
+            })
+        },
+
+        mensajeErrorEditarCategoria(errorModifica){
+            Swal.fire({
+                icon:'error',
+                title:errorModifica,
+                showConfirmButton:false,
+                timer:1500
+            })
+        },
+
     },
 }
 </script>
