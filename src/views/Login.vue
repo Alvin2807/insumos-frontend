@@ -1,104 +1,166 @@
 <template>
-    <v-app id="fondo">
-        <hello-world/>
-       <v-container>
-        <v-layout wrap >
-        <v-flex sm12 md6 offset-md3 class="pa-16" align="center" justify="center">
-          <v-card elevation="6" light tag="section" max-width="400px" class="mx-auto">
-            <v-card-title>
-              <v-layout align-center justify-space-between>
-                <h3 id="iniciarSesion">{{ iniciarTitulo }}</h3>
-              </v-layout>
-            </v-card-title>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-form>
-                <v-text-field
-                    prepend-icon="account_circle"
-                    label="Usuario"
-                    type="text"
-                    color="#091862"
-                    :rules="campoObligatorio"
-                >
-                </v-text-field>
-                <v-text-field
-                    color="#091862"
-                    prepend-icon="mdi-lock"
-                    label="Contraseña"
-                    :type="showPassword ? 'text' : 'password'"
-                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="showPassword = ! showPassword"
-                    :rules="campoObligatorio"
-                >
-                </v-text-field>
-              </v-form>
-            </v-card-text>
-            <v-card-actions :class="{ 'pa-3': $vuetify.breakpoint.smAndUp }">
-              <v-spacer></v-spacer>
-              <v-btn color="#091862" 
-                dark
-                id="btn"
-                :large="$vuetify.breakpoint.smAndUp"
-                @click="accederSistema()"
-                >
-               
-                <v-icon left>
-                    password
-                </v-icon>
-                Ingresar
+ <v-app id="fondo">
+  <div class="text-center mt-16" id="titulo">
+    <img  class="mr-3" height="80" src="../assets/ministerio.png">
+    <img  class="mx-3" height="70" :src="require('../assets/sistema.png')"/>
+  <h3 class="white--text" id="sistema">Sistema de Inventario de Control e Insumos</h3>
+  </div>
+
+  <v-card width="430" class="mx-auto elevation-5 caption mt-5">
+    <v-card-text>
+      <div class="text-center">
+          <h3 class="mt-5" id="iniciar">Iniciar Sesión</h3>
+      </div>
+        <v-divider class="mt-3"></v-divider>
+        <v-container>
+            <v-form ref="validacion">
+                <v-row class="mt-2">
+                    <v-col
+                        cols="12"
+                        sm="6"
+                        md="12"
+                    >
+                        <v-text-field
+                            v-model="editedItem.usuario"
+                            label="Usuario"
+                            prepend-inner-icon="account_circle"
+                            color="#074976"
+                            autocomplete="off"
+                            class="text-sm-body-2"
+                            outlined
+                            id="usuario"
+                            dense
+                            height="50px"
+                            :rules="$rules.usuarioRules"
+                        >
+                        </v-text-field>
+                    </v-col>
+
+                    <v-col
+                        cols="12"
+                        sm="6"
+                        md="12"
+                    >
+                        <v-text-field
+                            v-model="editedItem.password"
+                            label="Contraseña"
+                            prepend-inner-icon="mdi-lock" 
+                            color="#074976"
+                            autocomplete="off"
+                            :type="showPassword ? 'text' : 'password'"
+                            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                            @click:append="showPassword = ! showPassword"
+                            id="contraseña"
+                            outlined
+                            dense
+                            class="text-sm-body-2"
+                            height="50px"
+                            :rules="$rules.contraseñaRules"
+                        >
+                        </v-text-field>
+                    </v-col>
+                </v-row>
+            </v-form>
+
+            <v-card-actions>
+                <!-- accederSistema-->
+                <v-spacer></v-spacer>
+              <v-btn
+                  class="white--text elvevation-0"
+                  :loading="loading"
+                  :disabled="loading"
+                  width="150px"
+                  color="#0F0C5F"
+                  x--large
+                  height="45px"
+                  @click="accederSistema()"
+              >
+                  Entrar
               </v-btn>
+              
             </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
-       </v-container>
-    </v-app>
+        </v-container>
+    </v-card-text>
+  </v-card>
+
+ </v-app>
 </template>
+<script src="sweetalert2.all.min.js"></script>
 <script>
-import HelloWorld from '../components/HelloWorld.vue'
+import { mapMutations } from 'vuex';
+import 'sweetalert2/dist/sweetalert2.min.css';
+import API from '@/api'
 export default {
-    name:'Login',
-    components:{
-        HelloWorld
-    },
-    data() {
-        return {
-            titulo:-1,
+  data () { 
+        return { 
+           editedTitulo:-1,
+            loader: null,
+            loading: false,
             showPassword: false,
-            campoObligatorio: 
-            [
-                v => !!v || 'Campo Obligatorio',
-                
-            ],
-            
+            editedItem: { 
+              usuario:'',
+              password:''
+            }
+          
+         
         }
     },
 
+    watch: {
+      loader () {
+        const l = this.loader
+        this[l] = !this[l]
+
+        setTimeout(() => (this[l] = false), 2000)
+
+        this.loader = null
+      }
+    },
+
+
     computed: {
-        iniciarTitulo(){
-            return this.titulo -1 ? 'Iniciar Sesion' : ''
-        }
+      
     },
 
     methods: {
+      ...mapMutations(['mostrarDetallesLogin']),
       accederSistema(){
-        this.$router.push({path:'/inicio'})
+        if (this.$refs.validacion.validate()) {
+          this.loader = 'loading'
+          API 
+          .post('iniciar_seccion', this.editedItem)
+          .then(respuesta=>{
+            if (respuesta.data.ok) {
+              this.mostrarDetallesLogin(respuesta.data.data)
+              localStorage.setItem('usuario',JSON.stringify(respuesta.data.data))
+              this.$router.push({path:'/inicio'})
+            } else {
+              this.mensajeErrorSesion(respuesta.data.message)
+            }
+          })
+        }
+      },
+
+      mensajeErrorSesion(message){
+        Swal.fire({
+          icon:'error',
+          title: message,
+          showConfirmButton:false,
+          timer:1500
+        })
       }
     },
+
 }
 </script>
 <style>
-#iniciarSesion{
-    font-family: "Times New Roman", Times, serif;
-    align-content: center;
+#fondo {
+  background-image: linear-gradient(#0F0C5F , white,#0F0C5F);
+}
+#sistema{
+  font-family: "Times New Roman", Times, serif;
+  font-size: 35px;
 }
 
-#fondo{
-    background-image: linear-gradient(#FDFEFE,#D8E7F6);
-}
-
-#btn:hover{
-  color: yellow;
-}
 
 </style>
