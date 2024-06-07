@@ -2,108 +2,107 @@
     <v-app>
        <v-container>
         <v-toolbar flat id="toolbar">
-                        <v-toolbar-title>
-                            <span>Formulario de Categoría</span>
-                        </v-toolbar-title>
-                    </v-toolbar>
-                    <v-divider></v-divider>
-                <v-form ref="validacion">
-                    
-                    <v-row class="mt-3">
-                        <v-col
-                            cols="12"
-                            sm="6"
-                        >
-                        
-                        <v-text-field
-                            v-model="editedItem.categoria"
-                            color="#074976"
-                            label="Nombre de categoría"
-                            autocomplete="off"
-                            :rules="$rules.required"
-                            class="caption my-input"
-                            type="text"
-                            maxLength="100"
-                        >
-                        </v-text-field>
-                        </v-col>
-                        <v-btn-toggle
-                            v-model="botones"
-                        >
-                            <v-btn
-                                dark
-                                color="#074976"
-                                @click="registrar()"
-                            >
-                            registrar
-                            </v-btn>
-                            <v-btn
-                                outlined
-                                
-                                color="#4A8BA2"
-                              
-                                :disabled="btnGuardar"
-                                @click="guardar()"
-                            >
-                                guardar cambios
-                            </v-btn>
-
-                        </v-btn-toggle>
-                    </v-row>
-                </v-form>
-                <v-toolbar flat>
-                    <v-spacer></v-spacer>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                        <v-text-field
-                            label="Buscar"
-                            autocomplete="off"
-                            color="#074976"
-                            type="text"
-                            v-model="search"
-                            prepend-icon="search"
-                            dense
-                        >
-
-                        </v-text-field>
-                    </v-col>
-                   
-                </v-toolbar>
-            <v-data-table
-                :headers="headers"
-                :items="desserts"
-                :search="search"
-                class="mt-3"
-                :loading="datos"
-            >
-                <template v-slot:[`item.actions`] = "{item}">
-                   <v-btn
-                    small
-                    fab
-                    dark
-                    text
-                    color="#1B2631"
-                    @click="editar(item)"
-                   >
-                    <v-icon>edit</v-icon>
-                   </v-btn>
-                </template>
-            </v-data-table>
-
-            <v-overlay
-                :value="overlay"
-                :opacity="opacity"
-            >
-                <v-progress-circular
-                    indeterminate
-                    size="150"
-                    color="#1A5276"
-                    width="15"
+            <v-toolbar-title>
+                <span id="tituloDato">Formulario de Categoría</span>
+            </v-toolbar-title>
+        </v-toolbar>
+        <v-divider></v-divider>
+        <v-form ref="validacion">
+            
+            <v-row class="mt-3">
+                <v-col
+                    cols="12"
+                    sm="6"
                 >
-                </v-progress-circular>
-            </v-overlay>
+                
+                <v-text-field
+                    v-model="editedItem.categoria"
+                    color="#074976"
+                    label="Nombre de categoría"
+                    autocomplete="off"
+                    :rules="$rules.required"
+                    class="caption my-input"
+                    type="text"
+                    maxLength="100"
+                >
+                </v-text-field>
+                </v-col>
+                <v-btn-toggle
+                    v-model="botones"
+                >
+                    <v-btn
+                        dark
+                        color="#074976"
+                        @click="registrar()"
+                    >
+                    registrar
+                    </v-btn>
+                    <v-btn
+                        color="green"
+                        class="white--text"
+                        :disabled="btnGuardar"
+                        @click="guardar()"
+                    >
+                        guardar cambios
+                    </v-btn>
+
+                </v-btn-toggle>
+            </v-row>
+        </v-form>
+        <v-toolbar flat>
+            <v-spacer></v-spacer>
+            <v-col
+                cols="12"
+                sm="6"
+            >
+                <v-text-field
+                    label="Buscar"
+                    autocomplete="off"
+                    color="#074976"
+                    type="text"
+                    v-model="search"
+                    prepend-icon="search"
+                    dense
+                >
+
+                </v-text-field>
+            </v-col>
+            
+        </v-toolbar>
+        <v-data-table
+            :headers="headers"
+            :items="desserts"
+            :search="search"
+            class="mt-3"
+            :loading="datos"
+            loading-text="Cragando por favor espere..."
+        >
+            <template v-slot:[`item.actions`] = "{item}">
+                <v-btn
+                small
+                fab
+                dark
+                text
+                color="#1B2631"
+                @click="editar(item)"
+                >
+                <v-icon>edit</v-icon>
+                </v-btn>
+            </template>
+        </v-data-table>
+
+        <v-overlay
+            :value="overlay"
+            :opacity="opacity"
+        >
+            <v-progress-circular
+                indeterminate
+                size="150"
+                color="#1A5276"
+                width="15"
+            >
+            </v-progress-circular>
+        </v-overlay>
            
      
        
@@ -337,8 +336,9 @@ export default {
     border-left: solid #074976 5px;
 }
 
-#tituloCss{
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
+
+#tituloDato{
+    font-family: Tahoma, Verdana, sans-serif;
 }
 
 .my-input input{

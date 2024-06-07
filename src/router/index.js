@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import store from '../store'
 
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -26,7 +27,16 @@ const routes = [
 
           component: ()=>
             import('../views/Categorias.vue'),
-          meta:{requireAuth: false}
+            meta:{requireAuth: false}
+      },
+
+      {
+        path:'/marcas',
+        name:'Marcas',
+
+          component: ()=>
+            import('../views/Marcas.vue'),
+            meta:{requireAuth: false}
       }
     ]
    
