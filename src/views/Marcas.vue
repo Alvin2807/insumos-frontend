@@ -3,7 +3,7 @@
         <v-container>
             <v-toolbar flat id="toolbar">
                 <v-toolbar-title>
-                    <span id="tituloDato">Formulario de Marcas y Modelos</span>
+                    <span id="tituloDato">Formulario de Marcas</span>
                 </v-toolbar-title>
             </v-toolbar>
             <v-divider></v-divider>

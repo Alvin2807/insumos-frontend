@@ -5,6 +5,7 @@ import store from '../store'
 
 
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -37,6 +38,15 @@ const routes = [
           component: ()=>
             import('../views/Marcas.vue'),
             meta:{requireAuth: false}
+      },
+
+      {
+        path:'/modelos',
+        name:'Modelos',
+
+          component: ()=>
+            import('../views/Modelos.vue'),
+          meta:{require:false}
       }
     ]
    

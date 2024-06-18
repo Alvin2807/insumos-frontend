@@ -99,7 +99,7 @@ export default {
           items: 
           [
             {title: 'Marcas', path:'/marcas' },
-            //{title: 'Modelos', path:'/modelos' },
+            {title: 'Modelos', path:'/modelos' },
             {title:'Categorías', path:'/categorias'},
           /*   {title: 'Grupos', path:'/grupos'},
             {title: 'SubGrupos', path:'/subgrupos' },
