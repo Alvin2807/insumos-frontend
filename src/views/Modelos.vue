@@ -114,6 +114,7 @@
                                             autocomplete="off"
                                             label="Modelo"
                                             class="caption my-input"
+                                            :rules="$rules.required"
                                         >
                                         </v-text-field>
                                         </v-col>

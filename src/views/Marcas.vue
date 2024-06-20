@@ -284,7 +284,7 @@ export default {
         informacion(){
             const usuario = localStorage.getItem('usuario');
             if (!usuario) {
-                this.$routers.push({path:'/'})
+                this.$router.push({path:'/'})
             }
             this.loginDatos.usuario = usuario
             this.mostrarData();

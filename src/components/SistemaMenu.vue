@@ -101,6 +101,7 @@ export default {
             {title: 'Marcas', path:'/marcas' },
             {title: 'Modelos', path:'/modelos' },
             {title:'Categorías', path:'/categorias'},
+
           /*   {title: 'Grupos', path:'/grupos'},
             {title: 'SubGrupos', path:'/subgrupos' },
             {title: 'Colores',path:'/colores' },
@@ -111,15 +112,15 @@ export default {
           ],
           title: 'Parametros',
         },
-       /*  {
-          action: 'list_alt',
+        {
+          action: 'dataset',
           items: 
           [
-            { title: 'Crear FR', path:'/CrearFR'},
-            {title: 'Historial de FR', path:'/historial-de-fr'},
+            {title: 'Nomenclaturas', path:'/nomenclaturas'},
+            {title: 'Insumos', path:'/insumos'},
           ],
-          title: 'FR',
-        }, */
+          title: 'Productos',
+        },
        
        /*  {
           action: 'receipt_long',

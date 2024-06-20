@@ -47,7 +47,18 @@ const routes = [
           component: ()=>
             import('../views/Modelos.vue'),
           meta:{require:false}
+      },
+
+      {
+        path:'/nomenclaturas',
+        name:'Nomenclatura',
+
+          component: ()=>
+            import('../views/Nomenclatura.vue')
+           
       }
+
+     
     ]
    
   
